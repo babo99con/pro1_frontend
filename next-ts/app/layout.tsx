@@ -1,15 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { CacheProvider } from "@emotion/react";
+import { CssBaseline} from "@mui/material";
+
 import createCache from "@emotion/cache";
 import { Provider } from "react-redux";
-import theme from "./theme";
-import AppShell from "./components/layout/AppShell";
-import { store } from "./store";
 
-const clientSideEmotionCache = createCache({ key: "css", prepend: true });
+import AppShell from "../widgets/app-shell/ui/AppShell";
+import { store } from "@/shared/store";
 
 export default function RootLayout({
   children,
@@ -19,14 +17,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <CacheProvider value={clientSideEmotionCache}>
-          <Provider store={store}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
+        <Provider store={store}>
+          <CssBaseline />
               <AppShell>{children}</AppShell>
-            </ThemeProvider>
           </Provider>
-        </CacheProvider>
+        
       </body>
     </html>
   );
