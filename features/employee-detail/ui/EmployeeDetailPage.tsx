@@ -116,7 +116,7 @@ const EmployeeDetailPage = () => {
       dispatch(updateEmployeeSuccess(updated));
 
       setEditMode(false);
-
+      
       router.push("/employees");
     } catch (err: unknown) {
       setError(getErrorMessage(err, "직원 정보를 저장할 수 없습니다."));

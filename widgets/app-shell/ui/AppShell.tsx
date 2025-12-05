@@ -45,7 +45,7 @@ const AppShell = ({ children }: AppShellProps) => {
 
   return (
     <Box sx={{ bgcolor: "grey.50", minHeight: "100vh" }}>
-      <NavBar title="직원 관리 콘솔" items={TOP_MENU} activePath={pathname} />
+      <NavBar title="직원 관리 콘솔: 최문희" items={TOP_MENU} activePath={pathname} />
       <Toolbar />
       <Box
         sx={{

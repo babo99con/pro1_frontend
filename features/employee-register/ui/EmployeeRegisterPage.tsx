@@ -108,8 +108,7 @@ const EmployeeRegisterPage = () => {
   type CommonEvent = InputEvent | SelectEvent; // 위 2가지 타입을 아우르는 하나의 타입을 선언
 
   
-const handleChange =
-  (key: keyof typeof form) => (event: CommonEvent) => 
+const handleChange = (key: keyof typeof form) => (event: CommonEvent) => 
   {
     setForm(prev => ({...prev,[key]: event.target.value,}));
   };
@@ -155,6 +154,7 @@ const handleChange =
     event.preventDefault();
     dispatch(createEmployeeRequest(form));
     setSubmitted(true);
+    
     router.push("/employees");
   };
 

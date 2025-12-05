@@ -7,6 +7,7 @@ import {
   deleteEmployeeApi,
   fetchEmployeesApi,
   updateEmployeeApi,
+  fetchEmployeesbyConditionApi,
 } from "../api/employeesApi";
 
 import {
@@ -25,6 +26,10 @@ import {
   deleteEmployeeRequest,
   deleteEmployeeSuccess,
   deleteEmployeeFailure,
+
+  fetchEmployeesByConditionRequest, 
+  fetchEmployeesByConditionSuccess,
+  fetchEmployeesByConditionFailure,
 
   type Employee,
   type EmployeeInput,
@@ -45,6 +50,22 @@ function* fetchEmployeesWorker() {
     );
   }
 }
+
+function* fetchEmployeesByConditionWorker(action: PayloadAction<EmployeeInput>) {
+  try {
+    // console.log(action.payload);
+    const employees: Employee[] = yield call(fetchEmployeesbyConditionApi, action.payload);
+    yield put(fetchEmployeesByConditionSuccess(employees));
+  } catch (err: unknown) {
+    yield put(
+      fetchEmployeesByConditionFailure(
+        getErrorMessage(err, "Failed to load employees")
+      )
+    );
+  }
+}
+
+
 
 function* createEmployeeWorker(action: PayloadAction<EmployeeInput>) {
   try {
@@ -96,4 +117,7 @@ export function* employeesSaga() {
   yield takeLatest(createEmployeeRequest.type, createEmployeeWorker);
   yield takeLatest(updateEmployeeRequest.type, updateEmployeeWorker);
   yield takeLatest(deleteEmployeeRequest.type, deleteEmployeeWorker);
+
+  yield takeLatest(fetchEmployeesByConditionRequest.type, fetchEmployeesByConditionWorker);
+  
 }

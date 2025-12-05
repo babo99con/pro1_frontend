@@ -24,7 +24,14 @@ export interface Employee {
   updatedAt?: string;
 }
 
+// 사용자 입력을 받기위해, id , 생성일, 수정일을 제외한 하나의 데이터 타입을 만듦.
 export type EmployeeInput = Omit<Employee, "id" | "createdAt" | "updatedAt">;
+
+// 직원 검색 조건을 위한 인터페이스
+export interface SearchCondition {
+  condition: keyof Employee; // 검색할 필드 (예: 'name', 'employeeId')
+  value: string; // 검색할 값
+}
 
 interface EmployeesState {
   items: Employee[];
@@ -164,6 +171,36 @@ const deleteEmployeeFailureReducer: CaseReducer<
   state.error = action.payload;
 };
 
+/* ==============================
+      조건부 직원 목록 조회 Reducers
+============================== */
+
+// 조건부 직원 목록 요청
+const fetchEmployeesByConditionRequestReducer: CaseReducer<
+  EmployeesState,
+  PayloadAction<SearchCondition> // 검색 조건과 값을 payload로 받음
+> = (state) => {
+  state.loading = true;
+  state.error = undefined;
+};
+
+// 조건부 직원 목록 성공
+const fetchEmployeesByConditionSuccessReducer: CaseReducer<
+  EmployeesState,
+  PayloadAction<Employee[]>
+> = (state, action) => {
+  state.loading = false;
+  state.items = action.payload;
+};
+
+// 조건부 직원 목록 실패
+const fetchEmployeesByConditionFailureReducer: CaseReducer<
+  EmployeesState,
+  PayloadAction<string>
+> = (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+};
 
 const employeesSlice = createSlice({
   name: "employees",
@@ -184,6 +221,10 @@ const employeesSlice = createSlice({
     deleteEmployeeRequest: deleteEmployeeRequestReducer,
     deleteEmployeeSuccess: deleteEmployeeSuccessReducer,
     deleteEmployeeFailure: deleteEmployeeFailureReducer,
+
+    fetchEmployeesByConditionRequest: fetchEmployeesByConditionRequestReducer,
+    fetchEmployeesByConditionSuccess: fetchEmployeesByConditionSuccessReducer,
+    fetchEmployeesByConditionFailure: fetchEmployeesByConditionFailureReducer,
   },
 });
 
@@ -191,15 +232,22 @@ export const {
   fetchEmployeesRequest,
   fetchEmployeesSuccess,
   fetchEmployeesFailure,
+
   createEmployeeRequest,
   createEmployeeSuccess,
   createEmployeeFailure,
+
   updateEmployeeRequest,
   updateEmployeeSuccess,
   updateEmployeeFailure,
+
   deleteEmployeeRequest,
   deleteEmployeeSuccess,
   deleteEmployeeFailure,
+  
+  fetchEmployeesByConditionRequest,
+  fetchEmployeesByConditionSuccess,
+  fetchEmployeesByConditionFailure,
 } = employeesSlice.actions;
 
 export default employeesSlice.reducer;
